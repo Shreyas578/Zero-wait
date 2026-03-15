@@ -131,28 +131,40 @@ async function updateWalletUI() {
         document.getElementById("userAddress").textContent =
             `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
 
-        // Update token balance
-        const tokenBalance = await contracts.token.balanceOf(userAddress);
-        const formattedBalance = parseFloat(ethers.utils.formatEther(tokenBalance)).toFixed(2);
-        document.getElementById("tokenBalance").textContent = formattedBalance;
-        document.getElementById("availableBalance").textContent = formattedBalance;
+        // Update token balance - guard individually so one failure doesn't block the rest
+        try {
+            const tokenBalance = await contracts.token.balanceOf(userAddress);
+            const formattedBalance = parseFloat(ethers.utils.formatEther(tokenBalance)).toFixed(2);
+            document.getElementById("tokenBalance").textContent = formattedBalance;
+            document.getElementById("availableBalance").textContent = formattedBalance;
+        } catch (e) {
+            console.warn("Could not fetch token balance (RPC issue):", e.message);
+        }
 
         // Update BNB balance
-        const bnbBalance = await provider.getBalance(userAddress);
-        document.getElementById("bnbBalance").textContent =
-            parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(4);
+        try {
+            const bnbBalance = await provider.getBalance(userAddress);
+            document.getElementById("bnbBalance").textContent =
+                parseFloat(ethers.utils.formatEther(bnbBalance)).toFixed(4);
+        } catch (e) {
+            console.warn("Could not fetch BNB balance (RPC issue):", e.message);
+        }
 
         // Update block info
-        const blockNumber = await provider.getBlockNumber();
-        const block = await provider.getBlock(blockNumber);
-        document.getElementById("currentBlock").textContent = blockNumber.toLocaleString();
-        document.getElementById("blockTimestamp").textContent =
-            new Date(block.timestamp * 1000).toLocaleTimeString();
+        try {
+            const blockNumber = await provider.getBlockNumber();
+            const block = await provider.getBlock(blockNumber);
+            document.getElementById("currentBlock").textContent = blockNumber.toLocaleString();
+            document.getElementById("blockTimestamp").textContent =
+                new Date(block.timestamp * 1000).toLocaleTimeString();
+        } catch (e) {
+            console.warn("Could not fetch block info (RPC issue):", e.message);
+        }
 
         // Load user stakes
         await loadUserStakes();
     } catch (error) {
-        console.error("Error updating UI:", error);
+        console.warn("Error updating UI (RPC may be rate-limited):", error.message);
     }
 }
 

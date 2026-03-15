@@ -4,9 +4,31 @@ const fs = require("fs");
 const path = require("path");
 
 // Configuration
-const RPC_URL = process.env.RPC_URL || "https://data-seed-prebsc-1-s1.binance.org:8545/";
+const RPC_URLS = [
+    process.env.RPC_URL,
+    "https://bsc-testnet-rpc.publicnode.com",
+    "https://data-seed-prebsc-2-s1.binance.org:8545/",
+    "https://data-seed-prebsc-1-s2.binance.org:8545/",
+    "https://data-seed-prebsc-1-s1.binance.org:8545/",
+].filter(Boolean);
+
+const POLL_INTERVAL = parseInt(process.env.POLL_INTERVAL || "3000"); // 3 seconds
+
+async function createProvider() {
+    for (const url of RPC_URLS) {
+        try {
+            const p = new ethers.providers.JsonRpcProvider(url);
+            await p.getNetwork(); // test connection
+            console.log("Connected to RPC:", url);
+            return p;
+        } catch (e) {
+            console.warn("RPC failed, trying next:", url);
+        }
+    }
+    throw new Error("All RPC endpoints failed. Check your internet connection.");
+}
+
 const PRIVATE_KEY = process.env.BOT_PRIVATE_KEY || process.env.PRIVATE_KEY;
-const POLL_INTERVAL = parseInt(process.env.POLL_INTERVAL || "1000"); // 1 second
 
 // Load ABIs
 const stakingABI = [
@@ -26,7 +48,7 @@ const walletABI = [
 
 class AutoUnstakeBot {
     constructor() {
-        this.provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+        this.provider = null;
         this.wallet = null;
         this.stakingContract = null;
         this.walletContract = null;
@@ -36,6 +58,9 @@ class AutoUnstakeBot {
 
     async initialize() {
         console.log("=== Auto-Unstake Bot Initializing ===\n");
+
+        // Connect to RPC with fallback
+        this.provider = await createProvider();
 
         // Setup wallet
         if (!PRIVATE_KEY || PRIVATE_KEY === "your_private_key_here") {
@@ -176,8 +201,7 @@ class AutoUnstakeBot {
                 {
                     gasLimit: 300000,
                     gasPrice: (await this.provider.getGasPrice()).mul(2), // 2x gas for priority
-                }
-            );
+                }            );
 
             console.log(`   Transaction: ${tx.hash}`);
             console.log(`   Waiting for confirmation...`);

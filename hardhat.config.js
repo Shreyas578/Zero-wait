@@ -14,10 +14,10 @@ module.exports = {
   },
   networks: {
     bscTestnet: {
-      url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      url: process.env.RPC_URL || "https://bsc-testnet-rpc.publicnode.com",
       chainId: 97,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      gasPrice: 3000000000, // 3 gwei - minimal for budget deployment
+      gasPrice: 5000000000, // 5 gwei - BSC testnet minimum
     },
   },
   etherscan: {

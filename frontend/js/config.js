@@ -3,7 +3,7 @@ const config = {
     // Network configuration
     chainId: 97, // BSC Testnet
     chainName: "BSC Testnet",
-    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+    rpcUrl: "https://data-seed-prebsc-2-s1.binance.org:8545/",
     blockExplorer: "https://testnet.bscscan.com",
     nativeCurrency: {
         name: "Test BNB",
@@ -21,8 +21,8 @@ const config = {
     // Lock duration (in seconds)
     lockDuration: 3600,
 
-    // Update interval (milliseconds)
-    updateInterval: 2000,
+    // Update interval (milliseconds) - keep low to avoid RPC rate limiting
+    updateInterval: 10000,
 };
 
 // Contract ABIs
