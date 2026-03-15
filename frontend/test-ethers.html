@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethers.js Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0e1a;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .status {
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .success {
+            border: 2px solid #00ff88;
+        }
+
+        .error {
+            border: 2px solid #ff4444;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 Ethers.js Library Test</h1>
+    <div id="status" class="status">
+        <p>Testing ethers.js library...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        const statusDiv = document.getElementById('status');
+
+        // Wait a bit for library to load
+        setTimeout(() => {
+            if (typeof ethers !== 'undefined') {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `
+                    <h2>✅ Success!</h2>
+                    <p>Ethers.js loaded successfully</p>
+                    <p>Version: <code>${ethers.version}</code></p>
+                    <p>You can now go back to the main page and connect your wallet.</p>
+                    <br>
+                    <a href="index.html" style="color: #00d4ff;">← Return to Zero-Wait Unstaking</a>
+                `;
+            } else {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `
+                    <h2>❌ Error</h2>
+                    <p>Ethers.js failed to load</p>
+                    <p>Please check your internet connection and browser console for errors.</p>
+                    <br>
+                    <button onclick="location.reload()" style="padding: 10px 20px; border-radius: 8px; border: none; background: #00d4ff; color: white; cursor: pointer;">
+                        Retry
+                    </button>
+                `;
+            }
+        }, 500);
+    </script>
+</body>
+
+</html>

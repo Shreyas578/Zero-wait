@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Wait Unstaking | BSC Testnet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Background Effects -->
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">⚡</div>
+                    <div class="logo-text">
+                        <h1>Zero-Wait Unstaking</h1>
+                        <p>Instant unstaking on BSC</p>
+                    </div>
+                </div>
+                <button id="connectWallet" class="btn btn-primary">
+                    <span class="btn-icon">🔗</span>
+                    Connect Wallet
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Wallet Info Card -->
+            <div id="walletInfo" class="card glass-card hidden">
+                <div class="card-header">
+                    <h3>Connected Wallet</h3>
+                    <div id="networkBadge" class="badge badge-success">BSC Testnet</div>
+                </div>
+                <div class="wallet-details">
+                    <div class="wallet-address">
+                        <span class="label">Address:</span>
+                        <span id="userAddress" class="value mono">Not connected</span>
+                    </div>
+                    <div class="wallet-balance">
+                        <span class="label">ZWTT Balance:</span>
+                        <span id="tokenBalance" class="value">0.00</span>
+                    </div>
+                    <div class="wallet-balance">
+                        <span class="label">BNB Balance:</span>
+                        <span id="bnbBalance" class="value">0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staking Card -->
+            <div id="stakingCard" class="card glass-card hidden">
+                <div class="card-header">
+                    <h3>⚡ Stake Tokens</h3>
+                    <p class="card-subtitle">Lock for 3600 seconds, unstake instantly when eligible</p>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <label for="stakeAmount">Amount to Stake</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="stakeAmount" placeholder="Enter amount" min="0" step="0.01">
+                            <span class="input-suffix">ZWTT</span>
+                        </div>
+                        <div class="input-hint">
+                            <span>Available: <span id="availableBalance">0.00</span> ZWTT</span>
+                            <button id="maxBtn" class="btn-link">MAX</button>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <div class="info-item">
+                            <span class="info-label">Lock Duration</span>
+                            <span class="info-value">3600 seconds (1 hour)</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Unstake Type</span>
+                            <span class="info-value highlight">⚡ Instant (Zero-Wait)</span>
+                        </div>
+                    </div>
+                    <button id="stakeBtn" class="btn btn-gradient btn-lg">
+                        <span class="btn-icon">🔒</span>
+                        Stake Tokens
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Stakes Card -->
+            <div id="stakesCard" class="card glass-card hidden">
+                <div class="card-header">
+                    <h3>📊 Your Stakes</h3>
+                    <button id="refreshBtn" class="btn btn-secondary btn-sm">
+                        <span class="btn-icon">🔄</span>
+                        Refresh
+                    </button>
+                </div>
+                <div id="stakesList" class="stakes-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>No active stakes</p>
+                        <small>Stake some tokens to get started!</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Stats -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon">⛓️</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Current Block</div>
+                        <div id="currentBlock" class="stat-value">-</div>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon">🕒</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Block Timestamp</div>
+                        <div id="blockTimestamp" class="stat-value">-</div>
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Staked</div>
+                        <div id="totalStaked" class="stat-value">0 ZWTT</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p id="loadingText">Processing...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
